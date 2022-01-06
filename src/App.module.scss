@@ -1,0 +1,27 @@
+@import './src/assets/styles/global';
+@import './src/assets/styles/variables';
+
+.app {
+  padding: 40px;
+  width: 100vw;
+  height: 100vh;
+  background-color: $darkBlue;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    font-size: 40px;
+    color: $gray;
+    text-align: center;
+    user-select: none;
+  }
+
+  .buttonsBlock {
+    display: flex;
+    column-gap: 40px;
+  }
+}

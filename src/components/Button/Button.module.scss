@@ -1,0 +1,28 @@
+@import './src/assets/styles/variables';
+@import './src/assets/styles/mixins';
+
+.button {
+  font-size: 20px;
+  width: 130px;
+  padding: 16px 30px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &.blue {
+    color: $white;
+    background-color: $violetBlue;
+  }
+
+  &.red {
+    color: $white;
+    background-color: red;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $darkGray;
+    color: $black;
+  }
+}
