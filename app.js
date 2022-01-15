@@ -14,16 +14,26 @@ const { ACTIONS, WEB_SOCKET_PORT } = require('./src/constants');
 //
 // app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
+// init websocket server
+// ws
+const WebSocket = require('ws');
+const wsServer = new WebSocket.Server({ port: WEB_SOCKET_PORT });
+
+// socket.io
+/*const app = require('express')();
+const http = require('http').Server(app);
+const wsServer = require('socket.io')(http);
+const port = WEB_SOCKET_PORT;
+
+http.listen(port, () => {
+  console.log(`Socket.IO server running at http://localhost:${port}/`);
+});*/
 
 const main = () => {
-  const WebSocket = require('ws');
-
-  // init websocket server
-  const wsServer = new WebSocket.Server({ port: WEB_SOCKET_PORT });
-
   // init initial states
   const pregressBars = {};
   let userCount = 0;
+  let curUserId;
 
   //
   const initProgressBar = (ms, getPrevVal, inc, callBack) => setInterval(() => {
@@ -38,7 +48,7 @@ const main = () => {
     // init new user
     console.log('new user');
     let userInterval = null;
-    const curUserId = userCount;
+    curUserId = userCount;
     pregressBars[curUserId] = 0;
 
     // inc user count
@@ -51,15 +61,31 @@ const main = () => {
     //
 
     const callBackFunction = (newVal) => {
+      // ws
       wsClient.send(newVal);
+
+      // socket.io
+      // wsServer.emit('back-end-progress', { data: newVal });
+
       pregressBars[curUserId] = newVal;
     };
 
     const getCurProgress = () => pregressBars[curUserId];
 
-    wsClient.on('message', function (messageJSON) {
+    // ws
+    const frontAction = 'message';
+
+    // socket.io
+    // const frontAction = 'frontend-send-action';
+
+    wsClient.on(frontAction, function (messageJSON) {
       // handle user message
+      // ws
       const message = JSON.parse(messageJSON);
+
+      // socket.io
+      // const message = messageJSON;
+
       console.log(message);
 
       try {
@@ -91,6 +117,10 @@ const main = () => {
   }
 
   wsServer.on('connection', onConnect);
+
+  wsServer.on('disconnect', () => {
+    console.log('user disconnected', curUserId);
+  });
 
   console.log('Server launched');
 };

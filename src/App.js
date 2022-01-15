@@ -4,16 +4,24 @@ import { useEffect, useState } from 'react';
 import Button, { VIEWS } from './components/Button';
 import { ACTIONS, WEB_SOCKET_PORT } from './constants';
 
+// socket.io
+// import socketClient  from "socket.io-client";
+
+// native
 const isDefined = (value) => (value !== null || value !== undefined);
-
 const webSocket = new WebSocket(`ws://localhost:${WEB_SOCKET_PORT}`);
-
 const wsSendMessage = (action, value) => {
   const requestData = { action };
   isDefined(value) && (requestData.data = value);
   const json = JSON.stringify(requestData);
   webSocket.send(json);
 }
+
+// socket.io
+/*const socket = socketClient(`ws://localhost:${WEB_SOCKET_PORT}`);
+const wsSendMessage = (action, value) => {
+  socket.emit(action, value);
+}*/
 
 const App = () => {
   const [progress, setProgress] = useState(0);
@@ -26,6 +34,7 @@ const App = () => {
      webSocket.send(JSON.stringify({action: 'PING'}));
      }*/
 
+    // native
     webSocket.onopen = function () {
       console.log('connected');
     };
@@ -36,10 +45,24 @@ const App = () => {
       (+message.data === 100) && wsSendMessage(ACTIONS.STOP);
     };
 
+    // socket.io
+    /*socket.on('connect', () => {
+      console.log(`I'm connected with the back-end`);
+    });
+
+    socket.on('back-end-progress', (message) => {
+      (+message.data) && setProgress(+message.data);
+      (+message.data === 100) && wsSendMessage('frontend-send-action', {action: ACTIONS.STOP});
+    });*/
   }, []);
   
   const onButtonClick = (action) => {
+    // native
     wsSendMessage(action);
+
+    // socket.io
+    // wsSendMessage('frontend-send-action', { action });
+
     if (action === ACTIONS.START || action === ACTIONS.RESTART) {
       setIsLoading(true);
     } else if (action === ACTIONS.STOP) {
