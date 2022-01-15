@@ -16,18 +16,18 @@ const { ACTIONS, WEB_SOCKET_PORT } = require('./src/constants');
 
 // init websocket server
 // ws
-const WebSocket = require('ws');
-const wsServer = new WebSocket.Server({ port: WEB_SOCKET_PORT });
+/*const WebSocket = require('ws');
+const wsServer = new WebSocket.Server({ port: WEB_SOCKET_PORT });*/
 
 // socket.io
-/*const app = require('express')();
+const app = require('express')();
 const http = require('http').Server(app);
 const wsServer = require('socket.io')(http);
 const port = WEB_SOCKET_PORT;
 
 http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
-});*/
+});
 
 const main = () => {
   // init initial states
@@ -62,10 +62,10 @@ const main = () => {
 
     const callBackFunction = (newVal) => {
       // ws
-      wsClient.send(newVal);
+      // wsClient.send(newVal);
 
       // socket.io
-      // wsServer.emit('back-end-progress', { data: newVal });
+      wsServer.emit('back-end-progress', { data: newVal });
 
       pregressBars[curUserId] = newVal;
     };
@@ -73,18 +73,18 @@ const main = () => {
     const getCurProgress = () => pregressBars[curUserId];
 
     // ws
-    const frontAction = 'message';
+    // const frontAction = 'message';
 
     // socket.io
-    // const frontAction = 'frontend-send-action';
+    const frontAction = 'frontend-send-action';
 
     wsClient.on(frontAction, function (messageJSON) {
       // handle user message
       // ws
-      const message = JSON.parse(messageJSON);
+      // const message = JSON.parse(messageJSON);
 
       // socket.io
-      // const message = messageJSON;
+      const message = messageJSON;
 
       console.log(message);
 
