@@ -9,6 +9,7 @@ import { ACTIONS, WEB_SOCKET_PORT } from './constants';
 
 // native
 const isDefined = (value) => (value !== null || value !== undefined);
+
 const webSocket = new WebSocket(`ws://localhost:${WEB_SOCKET_PORT}`);
 const wsSendMessage = (action, value) => {
   const requestData = { action };
