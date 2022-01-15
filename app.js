@@ -117,7 +117,7 @@ const main = () => {
     });*/
 
     // socket.io
-    wsClient.on("disconnect", () => {
+    wsClient.on('disconnect', () => {
       console.log('user disconnect', curUserId);
 
       clearInterval(userInterval);
@@ -125,10 +125,6 @@ const main = () => {
   }
 
   wsServer.on('connection', onConnect);
-
-  wsServer.on('disconnect', () => {
-    console.log('user disconnected', curUserId);
-  });
 
   console.log('Server launched');
 };
